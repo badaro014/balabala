@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>#</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100%;
+      background-color: #0d0d0d;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: sans-serif;
+    }
+
+    #loveButton {
+      padding: 20px 40px;
+      font-size: 24px;
+      background-color: #ff4da6;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 6px 12px rgba(255, 255, 255, 0.3);
+      position: absolute;
+      z-index: 10;
+    }
+
+    .love {
+      position: absolute;
+      font-size: 20px;
+      animation: firework 1.8s ease-out forwards;
+      opacity: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    @keyframes firework {
+      0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--dx), var(--dy)) scale(1.8) rotate(720deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <button id="loveButton">COBA KLIK JENI</button>
+
+  <script>
+    const button = document.getElementById('loveButton');
+
+    button.addEventListener('click', () => {
+      // Ambil posisi tengah tombol sebagai pusat ledakan
+      const rect = button.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      fireworkExplosion(centerX, centerY, 80); // jumlah love dalam satu ledakan
+    });
+
+    function fireworkExplosion(x, y, totalLove) {
+      for (let i = 0; i < totalLove; i++) {
+        const love = document.createElement('div');
+        love.classList.add('love');
+        love.textContent = '❤️';
+
+        const angle = (Math.PI * 2 / totalLove) * i;
+        const distance = Math.random() * 150 + 80;
+
+        const dx = Math.cos(angle) * distance;
+        const dy = Math.sin(angle) * distance;
+
+        love.style.left = `${x}px`;
+        love.style.top = `${y}px`;
+        love.style.setProperty('--dx', `${dx}px`);
+        love.style.setProperty('--dy', `${dy}px`);
+
+        // Acak ukuran dan warna
+        love.style.fontSize = `${Math.random() * 20 + 16}px`;
+        const colors = ['#ff4d4d', '#ff66cc', '#ff3399', '#ff1a75', '#ff0000', '#ff99cc'];
+        love.style.color = colors[Math.floor(Math.random() * colors.length)];
+
+        document.body.appendChild(love);
+
+        setTimeout(() => {
+          love.remove();
+        }, 1800);
+      }
+    }
+  </script>
+
+</body>
+</html>
